@@ -27,8 +27,8 @@ msg.add_alternative("""\
 </html>
 """, subtype='html')
 
-port = 465 # For gmail SSL
-context = ssl.create_default_context() # something that helps establish ssl connection
+port = 465  # For gmail SSL
+context = ssl.create_default_context()  # something that helps establish ssl connection
 
 with smtplib.SMTP_SSL('smtp.gmail.com', port=port, context=context) as server:
     try:
