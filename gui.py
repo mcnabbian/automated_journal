@@ -2,9 +2,6 @@ from datetime import datetime
 from tkinter import *
 from tkinter import messagebox
 
-# Create tk object
-root = Tk()
-
 
 def get_date_time():
     # Converting datetime object to string
@@ -33,21 +30,42 @@ def popup():
 #     # TODO: Add save entry to database functionality.
 #
 
-# Vertical (y) Scroll Bar
-scroll = Scrollbar(root)
-scroll.pack(side=RIGHT, fill=Y)
+# Create tk object
+root = Tk()
+
+canvas = Canvas(root)  # TODO: What is a canvas and why do I add a frame to it?
+scroll_y = Scrollbar(root, orient='vertical', command=canvas.yview)
+frame = Frame(root)
 
 # Create desired widgets
-# TODO: Add other questions efficiently
-question = Label(root, text="What was your favorite part about today?")
-text_box = Text(root, height=6, width=35, borderwidth=5,
-                relief="groove", font=("Times", 14), wrap=WORD)
-my_button = Button(root, text="Submit", padx=35, command=popup)
+with open('questions.txt', 'r') as f:
+    for line in f:
 
+        # initialize widgets
+        question = Label(frame, text=line[:-1])  # cut last char from string because it's a '/n'
+        text_box = Text(frame, height=6, width=35, borderwidth=5,
+                        relief="groove", font=("Times", 14), wrap=WORD)
+
+        # add widgets to frame
+        question.pack(side="top")
+        text_box.pack(side="top")
+button = Button(frame, text="Submit", padx=35, command=popup)
+button.pack(side="bottom")
+
+# create new window, put frame in canvas
+canvas.create_window(0, 0, anchor='nw', window=frame)
+canvas.update_idletasks()  # TODO: not really sure what this does
+canvas.configure(scrollregion=canvas.bbox('all'),
+                 yscrollcommand=scroll_y.set)  # TODO: scroll region currently only on the scroll bar, idk why
+
+canvas.pack(fill='both', expand=True, side='left')
+scroll_y.pack(fill='y', side='right')
 # Add widgets to window
-question.pack()
-text_box.pack()
-my_button.pack()
+# question.pack(side="top")
+# text_box.pack(side="top")
+# scroll.pack(side=RIGHT, fill=Y)
+# button = Button(frame, text="Submit", padx=35, command=popup)
+# button.pack(side="bottom")
 
 # Loop script to constantly update and keep running
 root.mainloop()
