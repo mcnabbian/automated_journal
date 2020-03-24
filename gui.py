@@ -19,7 +19,7 @@ def save():
         for i in range(len(entries)):
             string = entries[i].get('1.0', 'end-1c')
             if string:
-                f.write("\n" + entries[i].get('1.0', 'end-1c'))
+                f.write("\n" + string)
 
 
 def popup():
