@@ -4,60 +4,56 @@ from tkinter import messagebox
 
 
 def get_date_time():
-    # Converting datetime object to string
-    # TODO: round seconds to nearest whole number
+    """Return current date and time as a string."""
     date_time = datetime.now()
-    date_time_string = date_time.strftime("%b-%d-%Y (%H:%M:%S.%f)")
+    date_time_string = date_time.strftime("%b-%d-%Y (%H:%M:%S)")
     return date_time_string
 
 
-def save_entry():
-    #  open file and append, if it doesn't exist then create it.
+def save():
+    """Write user's input to text file upon submit."""
+    # open file and append, if it doesn't exist then create it.
     with open('journal_entries.txt', 'a+') as f:
         # .get the input in text widget at the first line, '0th' character, then read until the end
-        f.write("\n" + get_date_time() + "\n" + text_box.get('1.0', 'end-1c'))
-    # TODO: fix method to save all entries
+        f.write("\n" + get_date_time())
+        for i in range(len(entries)):
+            string = entries[i].get('1.0', 'end-1c')
+            if string:
+                f.write("\n" + entries[i].get('1.0', 'end-1c'))
 
 
 def popup():
+    """Display popup message confirming submission."""
     msg = messagebox.askyesno('Warning', 'Are you sure you would like to submit?')
     if msg:  # if user clicked yes
-        save_entry()
+        save()
         root.destroy()
-
-
-def create_questions():
-    with open('questions.txt', 'r') as f:
-        for line in f:
-            # initialize widgets
-            question = Label(frame, text=line[:-1])  # cut last char from string because it's a '/n'
-            text_box = Text(frame, height=6, width=35, borderwidth=5,
-                            relief="groove", font=("Times", 14), wrap=WORD)
-
-            # add widgets to frame
-            question.pack(side="top")
-            text_box.pack(side="top")
-
-# def submit():
-#     """Command for the submit button. Ends the script and saves entry to database."""
-#     # TODO: Add save entry to database functionality.
-#
-
-# Create tk object
 
 
 # initialize tkinter
 root = Tk()
 root.geometry('510x500')
 
-# initialize canvas widget within root
+# initialize canvas to use scrollbar
 canvas = Canvas(root)
 scroll_y = Scrollbar(root, orient='vertical', command=canvas.yview)
-# initialize frame within
+
+# initialize frame to pack widgets into
 frame = Frame(root, bd='25', padx='75')
 
-# Create desired widgets
-create_questions()
+# initialize questions and text boxes
+entries = []
+i = 0
+with open('questions.txt', 'r') as f:
+    for line in f:
+        q1 = Label(frame, text=line[:-1])  # cut last char from line b/c it's '\n'
+        q1.pack()
+        entries.append(Text(frame, height=6, width=35, borderwidth=5,
+                            relief="groove", font=("Times", 14), wrap=WORD))
+        entries[i].pack()
+        i += 1
+
+# initialize submit button
 button = Button(frame, text="Submit", padx=35, command=popup)
 
 # create new window, put frame in canvas
@@ -66,7 +62,7 @@ canvas.update_idletasks()  # not sure what this really does but not having it br
 canvas.configure(scrollregion=canvas.bbox('all'),
                  yscrollcommand=scroll_y.set)
 
-# pack widgets
+# add widgets to gui
 canvas.pack(fill='both', expand=True, side='left')
 scroll_y.pack(fill='y', side='right')
 button.pack(side="bottom")
