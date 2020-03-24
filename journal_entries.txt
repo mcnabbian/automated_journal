@@ -1,8 +1,8 @@
-this is a testWill this overwrite my old entry? I hope it doesn't./nlets see how this works/nokay lets try this one more time
-I was really screwing things up before by having the slash in the wrong direction lololol
-17-Mar-2020 (10:32:55.097275)
-Maybe this will work?
-Mar-17-2020 (10:34:02.457215)
-this should switch around the month and the day
-Mar-17-2020 (10:37:45.164442)
-I hope this works because my code now looks so much nicer
+
+Mar-24-2020 (10:24:08)
+I learned how to create a list of objects without individually defining them with variable names.
+That I'm capable of programming, struggle as I might at times.
+Program successfully works and the code is much cleaner than it was before.
+Drink less coffee!
+There's always more 'to do'. My most basic goal is to remain present, which I definitely failed at the majority of the time.
+Build a database.
