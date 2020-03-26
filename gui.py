@@ -1,4 +1,5 @@
 from datetime import datetime
+import sqlite3
 from tkinter import *
 from tkinter import messagebox
 
@@ -10,7 +11,55 @@ def get_date_time():
     return date_time_string
 
 
-def save():
+def save_db():
+    # establish connection to db
+    conn = sqlite3.connect('journal_entries.db')
+
+    # create cursor to execute commands
+    c = conn.cursor()
+
+    # create table if specified table does not exist
+    c.execute("""SELECT count(name) 
+            FROM sqlite_master 
+            WHERE type='table' AND name='entries' 
+            """)
+    table_check = c.fetchone()[0]
+    if table_check == 0:  # does not exist
+        c.execute("""CREATE TABLE entries (
+                date_time text,
+                q_1 text,
+                q_2 text,
+                q_3 text,
+                q_4 text,
+                q_5 text,
+                q_6 text
+                )""")
+
+    # insert new row (entry)
+    # TODO: refactor code/make flexible. Build dictionary of column, inputs then loop through?
+    c.execute("INSERT INTO entries VALUES (:date_time, :q_1, :q_2, :q_3, :q_4, :q_5, :q_6)",
+              {
+                  'date_time': get_date_time(),
+                  'q_1': entries[0].get('1.0', 'end-1c'),
+                  'q_2': entries[1].get('1.0', 'end-1c'),
+                  'q_3': entries[2].get('1.0', 'end-1c'),
+                  'q_4': entries[3].get('1.0', 'end-1c'),
+                  'q_5': entries[4].get('1.0', 'end-1c'),
+                  'q_6': entries[5].get('1.0', 'end-1c')
+              }
+              )
+
+    # commit changes
+    conn.commit()
+
+    # c.execute("SELECT * from entries")
+    # print(c.fetchall())
+
+    # close connection
+    conn.close()
+
+
+def save_txt():
     """Write user's input to text file upon submit."""
     # open file and append, if it doesn't exist then create it.
     with open('journal_entries.txt', 'a+') as f:
@@ -26,7 +75,8 @@ def popup():
     """Display popup message confirming submission."""
     msg = messagebox.askyesno('Warning', 'Are you sure you would like to submit?')
     if msg:  # if user clicked yes
-        save()
+        save_txt()
+        save_db()
         root.destroy()
 
 
@@ -58,7 +108,7 @@ button = Button(frame, text="Submit", padx=35, command=popup)
 
 # create new window, put frame in canvas
 canvas.create_window(0, 0, anchor='nw', window=frame)
-canvas.update_idletasks()  # not sure what this really does but not having it breaks the program
+canvas.update_idletasks()  # call update to gui for scrollbar functionality
 canvas.configure(scrollregion=canvas.bbox('all'),
                  yscrollcommand=scroll_y.set)
 
