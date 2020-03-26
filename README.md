@@ -21,8 +21,7 @@ I will break this project down into the following steps:
   - Using and saving emails not a priority
 5. I will then modify the program to send a message to my desktop using a GUI. 	❌
   - This seems like the same idea as step #7. Not a priority for right now.
-6. Continue to save replies/entries into database/file. ❌
-  - Working on this right now
+6. Continue to save replies/entries into database/file. ✅
 7. Send desktop push notifications. ❌
 
 *everything below is something to look into in the future*
