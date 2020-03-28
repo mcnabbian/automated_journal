@@ -12,6 +12,7 @@ def get_date_time():
 
 
 def save_db():
+    """Opens or creates database and saves user's input as new row."""
     # establish connection to db
     conn = sqlite3.connect('journal_entries.db')
 
@@ -96,12 +97,22 @@ entries = []
 i = 0
 with open('questions.txt', 'r') as f:
     for line in f:
-        q1 = Label(frame, text=line[:-1])  # cut last char from line b/c it's '\n'
-        q1.pack()
+        q = Label(frame, text=line[:-1])  # cut last char from line b/c it's '\n'
+        q.pack()
         entries.append(Text(frame, height=6, width=35, borderwidth=5,
                             relief="groove", font=("Times", 14), wrap=WORD))
         entries[i].pack()
         i += 1
+
+# use dictionary instead?
+# entries = {}
+# with open('questions.txt', 'r') as f:
+#     for line in f:
+#         entries[Label(frame, text=line[:-1])] = Text(frame, height=6, width=35, borderwidth=5,
+#                                                     relief="groove", font=("Times", 14), wrap=WORD)
+#     for key, value in entries.items():
+#         key.pack()
+#         value.pack()
 
 # initialize submit button
 button = Button(frame, text="Submit", padx=35, command=popup)
